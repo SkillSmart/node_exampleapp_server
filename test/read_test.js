@@ -33,7 +33,24 @@ describe('Read a CourseContent Entry from the Database', function () {
             title: "My first Document",
             body: "My first Document Body"
         });
-        firstRating = {
+        // Second Set
+        secondCourse = new Course({
+            title: "My second Course",
+            summary: "Second Course summary"
+        });
+        secondModule = new Module({
+            title: "My second Module",
+            summary: 'Second Module summary',
+        });
+        secondLesson = new Lesson({
+            title: "My second Lesson",
+            body: 'Second Lesson Body'
+        });
+        secondDocument = new Document({
+            title: "My second Document",
+            body: "My second Document Body"
+        });
+        secondRating = {
             rating: 5,
             feedbackBody: "A superb experience!!!"
         };
@@ -76,5 +93,23 @@ describe('Read a CourseContent Entry from the Database', function () {
     it('retrieves a Document by Attribute', async function () {
         let document = await Document.findOne({body: 'My first Document Body'})
         assert(document.body === 'My first Document Body');
+    });
+
+    // Retrieve List of Elements
+    it('retrieve a List of Courses', async function () {
+        let courses = await Course.find();
+        assert(courses.length === 2);
+    });
+    it('retrieve a List of Modules', async function () {
+        let modules = await Module.find();
+        assert(modules.length === 2);
+    });
+    it('retrieve a List of Lessons', async function () {
+        let lessons = await Lesson.find();
+        assert(lessons.length === 2);
+    });
+    it('retrieve a List of Documents', async function () {
+        let documents = await Document.find();
+        assert(documents.length === 2);
     });
 })
