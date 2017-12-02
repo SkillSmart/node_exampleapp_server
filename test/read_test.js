@@ -59,7 +59,7 @@ describe('Read a CourseContent Entry from the Database', function () {
             .then(() => done()).catch(err => console.log(err));
     })
 
-    // Retrieve Doc by ID
+    // Retrieve Element by ID
     it('retrieves a Course by ID', async function () {
         let course = await Course.findById(firstCourse._id);
         assert(course.id.toString() === firstCourse.id.toString());
@@ -112,4 +112,5 @@ describe('Read a CourseContent Entry from the Database', function () {
         let documents = await Document.find();
         assert(documents.length === 2);
     });
+
 })
