@@ -31,4 +31,4 @@ const CourseSchema = new Schema({
 // Register .pre and .post middleware hooks
 
 // Export the Model
-model.exports = mongoose.model('course', CourseSchema);
+module.exports = mongoose.model('course', CourseSchema);

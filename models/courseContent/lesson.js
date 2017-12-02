@@ -9,8 +9,10 @@ const LessonSchema = new Schema({
     summary: String, 
     videoURL: String,
     body: String,
-    documents: [Document],
-
+    documents: [{
+        type: Schema.Types.ObjectId,
+        ref: 'document'
+    }],
 });
 
 // Register Virtual Types

@@ -9,4 +9,4 @@ const DocumentSchema = new Schema({
 });
 
 
-module.exports = DocumentSchema;
+module.exports = mongoose.model('document', DocumentSchema);
