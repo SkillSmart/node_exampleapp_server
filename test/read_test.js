@@ -95,7 +95,7 @@ describe('Read a CourseContent Entry from the Database', function () {
         assert(document.body === 'My first Document Body');
     });
 
-    // Retrieve List of Elements
+    // Retrieve complete List of Elements
     it('retrieve a List of Courses', async function () {
         let courses = await Course.find();
         assert(courses.length === 2);
