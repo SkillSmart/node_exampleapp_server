@@ -17,7 +17,7 @@ const RatingSchema = new Schema({
     }, 
     user: {
         type: Schema.Types.ObjectId,
-        model: 'user'
+        ref: 'user'
     }
 });
 

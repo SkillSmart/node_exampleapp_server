@@ -9,11 +9,11 @@ const CourseSchema = new Schema({
     summary: String,
     modules: [{
         type: Schema.Types.ObjectId,
-        model: 'module'
+        ref: 'module'
     }],
     lessons: [{
         type: Schema.Types.ObjectId,
-        model: 'lesson'
+        ref: 'lesson'
     }],
     basePrice: Number, 
     favs: {
@@ -22,7 +22,7 @@ const CourseSchema = new Schema({
     },
     ratings: [{
         type: Schema.Types.ObjectId,
-        model: 'rating'
+        ref: 'rating'
     }]
 });
 
