@@ -1,4 +1,4 @@
-const assert = require('assert');
+const expect = require('expect');
 
 // Model imports
 const Course = require('../models/courseContent/course');
@@ -9,14 +9,14 @@ const Document = require('../models/courseContent/document');
 
 describe('Create Elements in Database', function () {
     
-    // Create individual Documents in DB
+    // // Create individual Documents in DB
     it('creates a Course', async function () {
         let course = new Course({
             title: 'My first Course',
             summary: 'My first summary'
         });
         course = await course.save();
-        assert(Course.findById(course.id));
+        expect(Course.findById(course.id)).toBeTruthy();
     });
     it('creates a Module', async function () {
         let mod = new Module({
@@ -24,7 +24,8 @@ describe('Create Elements in Database', function () {
             summary: 'My first summary'
         });
         mod = await mod.save();
-        assert(Module.findById(mod.id));
+        
+        expect(Module.findById(mod.id)).toBeTruthy();
     });
     it('creates a Lesson', async function () {
         let lesson = new Lesson({
@@ -32,7 +33,7 @@ describe('Create Elements in Database', function () {
             summary: 'My first summary'
         });
         lesson = await lesson.save();
-        assert(Lesson.findById(lesson.id));
+        expect(Lesson.findById(lesson.id)).toBeTruthy();
     });
     it('creates a Document', async function () {
         let document = new Document({
@@ -40,10 +41,9 @@ describe('Create Elements in Database', function () {
             summary: 'My first summary'
         });
         document = await document.save();
-        assert(Document.findById(document.id));
+        expect(Document.findById(document.id)).toBeTruthy();
     });
-
-
+    
     // Create multiple Documents in DB
     it('creates multiple Courses in DB', async function () {
         let course1, course2, course3;
@@ -62,9 +62,9 @@ describe('Create Elements in Database', function () {
         // Save models to DB
         await Course.create([course1, course2, course3]);
         // Assert
-        assert(Course.findOne({title: 'Course1'}));
-        assert(Course.findOne({title: 'Course2'}));
-        assert(Course.findOne({title: 'Course3'}));
+        expect(Course.findOne({title: 'Course1'})).toBeTruthy();
+        expect(Course.findOne({title: 'Course2'})).toBeTruthy();
+        expect(Course.findOne({title: 'Course3'})).toBeTruthy();
     });
     // Multiple Modules
     it('creates multiple Modules in DB', async function () {
@@ -84,9 +84,9 @@ describe('Create Elements in Database', function () {
         // Save models to DB
         await Module.create([mod1, mod2, mod3]);
         // Assert
-        assert(Module.findOne({title: 'mod1'}));
-        assert(Module.findOne({title: 'mod2'}));
-        assert(Module.findOne({title: 'mod3'}));
+        expect(Module.findOne({title: 'mod1'})).toBeTruthy();
+        expect(Module.findOne({title: 'mod2'})).toBeTruthy();
+        expect(Module.findOne({title: 'mod3'})).toBeTruthy();
     });
     // Multiple Lessons
     it('creates multiple Lessons in DB', async function () {
@@ -106,9 +106,9 @@ describe('Create Elements in Database', function () {
         // Save models to DB
         await Lesson.create([lesson1, lesson2, lesson3]);
         // Assert
-        assert(Lesson.findOne({title: 'lesson1'}));
-        assert(Lesson.findOne({title: 'lesson2'}));
-        assert(Lesson.findOne({title: 'lesson3'}));
+        expect(Lesson.findOne({title: 'lesson1'})).toBeTruthy();
+        expect(Lesson.findOne({title: 'lesson2'})).toBeTruthy();
+        expect(Lesson.findOne({title: 'lesson3'})).toBeTruthy();
     });
     // Multiple Documents
     it('creates multiple Documents in DB', async function () {
@@ -128,8 +128,8 @@ describe('Create Elements in Database', function () {
         // Save models to DB
         await Document.create([doc1, doc2, doc3]);
         // Assert
-        assert(Document.findOne({title: 'doc1'}));
-        assert(Document.findOne({title: 'doc2'}));
-        assert(Document.findOne({title: 'doc3'}));
+        expect(Document.findOne({title: 'doc1'})).toBeTruthy();
+        expect(Document.findOne({title: 'doc2'})).toBeTruthy();
+        expect(Document.findOne({title: 'doc3'})).toBeTruthy();
     });
 })

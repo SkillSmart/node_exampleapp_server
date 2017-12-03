@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon --exec mocha -R min",
+    "test": "nodemon --exec mocha",
     "server": "nodemon server.js"
   },
   "author": "",
@@ -17,6 +17,7 @@
     "mongoose": "^4.13.5"
   },
   "devDependencies": {
+    "expect": "^21.2.1",
     "mocha": "^4.0.1"
   }
 }

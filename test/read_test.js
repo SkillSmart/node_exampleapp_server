@@ -1,4 +1,4 @@
-const assert = require('assert');
+const expect = require('expect');
 // Auth Model
 const User = require('../models/auth/user');
 // const Creator = require('../models/auth/creator');
@@ -55,62 +55,65 @@ describe('Read a CourseContent Entry from the Database', function () {
             feedbackBody: "A superb experience!!!"
         };
 
-        Promise.all([firstCourse.save(), firstModule.save(), firstLesson.save(), firstDocument.save()])
+        Promise.all(
+            [firstCourse.save(), firstModule.save(), firstLesson.save(), firstDocument.save(),
+             secondCourse.save(), secondModule.save(), secondLesson.save(), secondDocument.save()
+            ])
             .then(() => done()).catch(err => console.log(err));
     })
 
     // Retrieve Element by ID
     it('retrieves a Course by ID', async function () {
         let course = await Course.findById(firstCourse._id);
-        assert(course.id.toString() === firstCourse.id.toString());
+        expect(course.id.toString()).toEqual(firstCourse.id.toString());
     });
     it('retrieves a Module by ID', async function () {
         let mod = await Module.findById(firstModule._id);
-        assert(mod.id.toString() === firstModule.id.toString());
+        expect(mod.id.toString()).toEqual(firstModule.id.toString());
     });
     it('retrieves a Lesson by ID', async function () {
         let lesson = await Lesson.findById(firstLesson.id);
-        assert(lesson.id.toString() === firstLesson.id.toString());
+        expect(lesson.id.toString()).toEqual(firstLesson.id.toString());
     });
     it('retrieves a Document by ID', async function () {
         let document = await Document.findById(firstDocument.id);
-        assert(document.id.toString() === firstDocument.id.toString());
+        expect(document.id.toString()).toEqual(firstDocument.id.toString());
     });
 
     // Retrieve Elements by Attribute
     it('retrieves a Course by Attribute', async function () {
         let course = await Course.findOne({title: "My first Course"});
-        assert(course.summary === "First Course summary");
+        expect(course.summary).toEqual("First Course summary");
     });
     it('retrieves a Module by Attribute', async function () {
         let mod = await Module.findOne({title: "My first Module"});
-        assert(mod.summary === 'First Module summary');
+        expect(mod.summary).toEqual('First Module summary');
     });
     it('retrieves a Lesson by Attribute', async function () {
         let lesson = await Lesson.findOne({title: "My first Lesson"});
-        assert(lesson.body === 'First Lesson Body');
+        expect(lesson.body).toEqual('First Lesson Body');
     });
     it('retrieves a Document by Attribute', async function () {
         let document = await Document.findOne({body: 'My first Document Body'})
-        assert(document.body === 'My first Document Body');
+        expect(document.body).toEqual('My first Document Body');
     });
 
     // Retrieve complete List of Elements
     it('retrieve a List of Courses', async function () {
         let courses = await Course.find();
-        assert(courses.length === 2);
+        expect(courses).toHaveLength(2);
     });
     it('retrieve a List of Modules', async function () {
         let modules = await Module.find();
-        assert(modules.length === 2);
+        expect(modules).toHaveLength(2);
     });
     it('retrieve a List of Lessons', async function () {
         let lessons = await Lesson.find();
-        assert(lessons.length === 2);
+        expect(lessons).toHaveLength(2);
     });
     it('retrieve a List of Documents', async function () {
         let documents = await Document.find();
-        assert(documents.length === 2);
+        expect(documents).toHaveLength(2);
     });
 
 })
