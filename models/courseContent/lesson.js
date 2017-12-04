@@ -3,6 +3,7 @@ const {Schema} = mongoose;
 
 // Local Schema& Model Imports
 const Document = require('./document');
+const Rating = require('./rating');
 
 const LessonSchema = new Schema({
     title: String, 
@@ -13,6 +14,10 @@ const LessonSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'document'
     }],
+    meta: {
+        favs: { type: Number, default: 0, min:0},
+        ratings: [Rating]
+    }
 });
 
 // Register Virtual Types

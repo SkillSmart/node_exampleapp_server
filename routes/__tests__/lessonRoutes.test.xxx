@@ -1,0 +1,66 @@
+const request = require('supertest');
+const app = require('../../server');
+
+// Model 
+const Lesson = require('../../models/courseContent/lesson');
+
+
+describe('Server Routes for LESSON API', function () {
+    
+    let lesson1, lesson2, lesson3;
+
+    beforeEach(async () => {
+        lesson1 = new Lesson({
+            title: 'test title1',
+            summary: 'test summary',
+        });
+        lesson2 = new Lesson({
+            title: 'test title2',
+            summary: 'test summary',
+        });
+        lesson3 = new Lesson({
+            title: 'test title3',
+            summary: 'test summary',
+        });
+        await Lesson.create([lesson1, lesson2, lesson3]);
+    });
+
+    afterEach( async () => {
+        await Lesson.collection.drop();
+    });
+
+    // Test CREATE
+    test('should create a Single Lesson on the Server', () => {
+      let lesson = {
+          title: 'test Lesson4',
+          summary: 'test summary4'
+      };
+      request(app)
+        .post('/api/lessons')
+        .expect(200)
+        .expect( course => {
+            console.log(course);
+        })
+        .end()
+    });
+
+
+    // Test READ
+    test('should fetch a single lesson from the server', async () => {
+        await request(app)
+        .get('/api/lessons')
+        .expect(200)
+
+    });
+    
+
+
+
+    // Test UPDATE
+
+
+
+    // Test DELETE
+
+    
+})

@@ -3,9 +3,15 @@
  * 
  */
 const mongoose = require('mongoose');
-const {Schema} = mongoose;
+const { Schema } = mongoose;
+const _ = require('lodash');
 
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+
+// Local imports
 const Follow = require('../activities/follow');
+
 
 const UserSchema = new Schema({
     firstName: {
@@ -14,17 +20,28 @@ const UserSchema = new Schema({
     lastName: {
         type: String
     },
-    email : {
-        type: String, 
-        required: true, 
+    email: {
+        type: String,
+        required: true,
         trim: true,
-        validate: email => email.length > 10,
-    }, 
+        validate: (email) => validator.isEmail(email),
+        unique: true
+    },
+    tokens: [{
+        access: {
+            type: String,
+            required: true
+        },
+        token: {
+            type: String,
+            required: true
+        }
+    }],
     // Section stores information about activities
     // that store information to be displayed back to the User
     meta: {
         likes: {
-            type: Number, 
+            type: Number,
             default: 0,
             min: 0
         },
@@ -39,7 +56,7 @@ const UserSchema = new Schema({
         favedArticles: [{
             type: Schema.Types.ObjectId,
             ref: 'article'
-        }], 
+        }],
         favedDocuments: [{
             type: Schema.Types.ObjectId,
             ref: 'document'
@@ -53,5 +70,45 @@ const UserSchema = new Schema({
     }]
 });
 
+// Add class methods
+UserSchema.methods.toJSON = function () {
+    let user = this;
+    let userObject = user.toObject();
+
+    return _.pick(userObject, ['_id', 'email']);
+};
+
+// Add instance methods
+UserSchema.methods.generateAuthToken = async function () {
+    let user = this;
+    let access = 'auth';
+    let token = jwt.sign({ _id: user._id.toHexString(), access }, 'abc123').toString();
+
+    user.tokens.push({ access, token });
+
+    return user.save()
+        .then(() => {
+            return token;
+        });
+};
+
+// Add class methods
+UserSchema.statics.findByToken = function (token) {
+    let User = this;
+    let decoded;
+
+    try {
+        decoded = jwt.verify(token, 'abc123');
+    } catch (e) {
+
+    }
+
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+
+};
 
 module.exports = mongoose.model('user', UserSchema);

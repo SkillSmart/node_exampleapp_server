@@ -27,6 +27,10 @@ describe('Server Routes for Course API', function () {
         await Promise.all([course1.save(), course2.save(), course3.save()])
     });
 
+    afterEach( async () => {
+        await Course.collection.drop();
+    });
+
     // GET Route tests
     test('GET api/courses returns a list of courses', async () => {
         request(app)
@@ -77,9 +81,6 @@ describe('Server Routes for Course API', function () {
             .post('/api/courses')
             .send({})
             .expect(200)
-            .expect(course => {
-                expect(course).toBeFalsy();
-            })
             .end(err => console.log(err))
     });
 
