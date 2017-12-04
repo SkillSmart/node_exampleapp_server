@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 
 
-const QuizItemSchem = new Schema({
+const QuizItemSchema = new Schema({
     question: String,
     answers: [String],
     answerType: String,
