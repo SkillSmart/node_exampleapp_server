@@ -1,0 +1,39 @@
+const mongoose = require('mongoose');
+const request = require('supertest');
+
+// Model to Test
+const Course = require('../rating');
+
+// Helper Functions
+const intializeTestDatabase = () => {
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost:27017/test_webserver', { useMongoClient: true });
+    mongoose.connection
+        .once('openUri', () => console.log("Good to go"))
+        .on('error', (err) => console.log(err));
+};
+const clearTestDatabase = async () => {
+    let {ratings} = mongoose.connection.collections;
+    await ratings.drop();
+}
+
+// General Test Setup Steps
+beforeAll(() => {
+    return intializeTestDatabase();
+});
+
+afterAll(() => {
+    return clearTestDatabase();
+});
+
+// Testing Suite
+
+describe('Document Creation on MongoDB', function () {
+    
+    test('a single Document can be stored', async () => {
+        let doc = new Document({
+            title: 'Test',
+            
+        })
+    })
+})

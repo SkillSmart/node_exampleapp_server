@@ -1,0 +1,29 @@
+const mongoose = require('mongoose');
+const request = require('supertest');
+
+// Model to Test
+const Course = require('../module');
+
+const intializeTestDatabase = () => {
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost:27017/test_webserver', { useMongoClient: true });
+    mongoose.connection
+        .once('openUri', () => console.log("Good to go"))
+        .on('error', (err) => console.log(err));
+};
+
+const clearTestDatabase = async () => {
+    let {modules} = mongoose.connection.collections;
+    await modules.drop();
+}
+
+
+// General Test Setup Steps
+
+beforeAll(() => {
+    return intializeTestDatabase();
+});
+
+afterAll(() => {
+    return clearTestDatabase();
+});

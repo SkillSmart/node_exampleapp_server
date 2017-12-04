@@ -13,3 +13,6 @@ require('./routes')(app);
 // Start the Server
 const port = process.env.PORT || 3000;
 app.listen(port);
+
+
+module.exports = app;

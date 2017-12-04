@@ -7,6 +7,7 @@ const {Schema} = mongoose;
 const CourseSchema = new Schema({
     title: String,
     summary: String,
+    description: String,
     modules: [{
         type: Schema.Types.ObjectId,
         ref: 'module'
