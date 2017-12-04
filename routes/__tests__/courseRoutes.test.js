@@ -1,12 +1,14 @@
 const request = require('supertest');
-const app = require('./../../../server');
+const app = require('./../../server');
 
 // Model
-const Course = require('../../../models/courseContent/course');
+const Course = require('../../models/courseContent/course');
 
-let course1, course2, course3;
 
 describe('Server Routes for Course API', function () {
+
+    let course1, course2, course3;
+    
     beforeEach(async () => {
 
         course1 = new Course({

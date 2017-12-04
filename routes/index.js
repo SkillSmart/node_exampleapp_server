@@ -1,4 +1,5 @@
 
 module.exports = (app) => {
-    require('./courseRoutes/courseRoutes')(app);
+    require('./courseRoutes')(app);
+    require('./moduleRoutes')(app);
 }

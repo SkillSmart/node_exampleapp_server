@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 // Module imports
-const Course = require('../../models/courseContent/course');
+const Course = require('../models/courseContent/course');
 
 module.exports = (app) => {
 
