@@ -15,7 +15,7 @@ const RatingSchema = new Schema({
         min: 15,
         max: 2000,
     }, 
-    user: {
+    _creator: {
         type: Schema.Types.ObjectId,
         ref: 'user'
     }

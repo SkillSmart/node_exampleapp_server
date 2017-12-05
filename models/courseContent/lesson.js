@@ -17,6 +17,11 @@ const LessonSchema = new Schema({
     meta: {
         favs: { type: Number, default: 0, min:0},
         ratings: [Rating]
+    },
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
     }
 });
 

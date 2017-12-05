@@ -8,6 +8,11 @@ const CourseSchema = new Schema({
     title: String,
     summary: String,
     description: String,
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     modules: [{
         type: Schema.Types.ObjectId,
         ref: 'module'

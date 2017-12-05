@@ -24,7 +24,12 @@ const ModuleSchema = new Schema({
     ratings: [{
         type: Schema.Types.ObjectId,
         ref: 'rating'
-    }]
+    }],
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    }
 });
 
 // // Register virtual types
