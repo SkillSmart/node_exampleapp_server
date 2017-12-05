@@ -8,6 +8,8 @@ const _ = require('lodash');
 
 const validator = require('validator');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 
 // Local imports
 const Follow = require('../activities/follow');
@@ -25,12 +27,21 @@ const UserSchema = new Schema({
         required: true,
         trim: true,
         validate: (email) => validator.isEmail(email),
+        message: `{VALUE} is not a valid email`,
         unique: true
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    country: {
+        type: String,
+        trim: true
     },
     tokens: [{
         access: {
             type: String,
-            required: true
+            required: true,
         },
         token: {
             type: String,
@@ -71,12 +82,12 @@ const UserSchema = new Schema({
 });
 
 // Add class methods
-UserSchema.methods.toJSON = function () {
-    let user = this;
-    let userObject = user.toObject();
+// UserSchema.methods.toJSON = function () {
+//     let user = this;
+//     let userObject = user.toObject();
 
-    return _.pick(userObject, ['_id', 'email']);
-};
+//     return _.pick(userObject, ['_id', 'email']);
+// };
 
 // Add instance methods
 UserSchema.methods.generateAuthToken = async function () {
@@ -92,23 +103,44 @@ UserSchema.methods.generateAuthToken = async function () {
         });
 };
 
-// Add class methods
-UserSchema.statics.findByToken = function (token) {
+// Add model methods
+UserSchema.statics.findByToken = async function (token) {
     let User = this;
     let decoded;
 
     try {
         decoded = jwt.verify(token, 'abc123');
     } catch (e) {
-
+        Promise.reject();
     }
 
     return User.findOne({
         '_id': decoded._id,
         'tokens.token': token,
         'tokens.access': 'auth'
-    });
+    }).catch(e => res.status(401).send(e));
 
 };
+
+// Add Lifecycle Hooks
+UserSchema.pre('save', function (next) {
+    let user = this;
+
+    if(user.isModified('password')) {
+        // Hash the password and store it on the user 
+        // before saving to the database
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash;        
+                next();
+            });
+        });
+        // Going on to saving the user
+        next();
+    } else { 
+        // Skip and straight go on to saving
+        next() 
+    }
+});
 
 module.exports = mongoose.model('user', UserSchema);
