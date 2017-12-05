@@ -81,13 +81,33 @@ const UserSchema = new Schema({
     }]
 });
 
-// Add class methods
-// UserSchema.methods.toJSON = function () {
-//     let user = this;
-//     let userObject = user.toObject();
+// Add Lifecycle Hooks
+UserSchema.pre('save', function (next) {
+    let user = this;
 
-//     return _.pick(userObject, ['_id', 'email']);
-// };
+    if (user.isModified('password')) {
+        // Hash the password and store it on the user 
+        // before saving to the database
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash;
+                next();
+            });
+        });
+    } else {
+        // Skip and straight go on to saving
+        next();
+    }
+});
+
+
+// Add class methods
+UserSchema.methods.toJSON = function () {
+    let user = this;
+    let userObject = user.toObject();
+
+    return _.pick(userObject, ['_id', 'email']);
+};
 
 // Add instance methods
 UserSchema.methods.generateAuthToken = async function () {
@@ -122,25 +142,23 @@ UserSchema.statics.findByToken = async function (token) {
 
 };
 
-// Add Lifecycle Hooks
-UserSchema.pre('save', function (next) {
-    let user = this;
-
-    if(user.isModified('password')) {
-        // Hash the password and store it on the user 
-        // before saving to the database
-        bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(user.password, salt, (err, hash) => {
-                user.password = hash;        
-                next();
+UserSchema.statics.findByCredentials = function (email, password) {
+    // console.log('called from findByCredentials', email, password);
+    let User = this;
+    return User.findOne({ email }).then(user => {
+        // console.log(user);
+        if (!user) return Promise.reject();
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {
+                if (res) {
+                    resolve(user);
+                } else {
+                    reject();
+                }
             });
         });
-        // Going on to saving the user
-        next();
-    } else { 
-        // Skip and straight go on to saving
-        next() 
-    }
-});
+    });
+};
+
 
 module.exports = mongoose.model('user', UserSchema);

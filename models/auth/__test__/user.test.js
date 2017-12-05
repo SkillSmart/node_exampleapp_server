@@ -37,7 +37,7 @@ beforeEach(() => {
     }).then(() => done());
 });
 
-describe('User Authentication', function () {
+describe('GET /users/me', function () {
 
     test('should return a User Profile when authenticated', (done) => {
         request(app)
@@ -45,18 +45,54 @@ describe('User Authentication', function () {
             .set('x-auth', user1.tokens.token)
             .expect(200)
             .expect(res => {
-                expect(res.body._id).toBe(user1._id);
+                expect(res.body._id).toBe(user1._id.toHexString());
                 expect(res.body.email).toBe(user1.email);
             })
             .end(done);
     });
 
-    test('should return 401 when not authenticated', (done) => {
+    test('should return 401 if not authenticated', (done) => {
         request(app)
         .get('/api/users/me')
         .expect(401)
+        .expect(res => {
+            expect(res.body).toEqual({});
+        })
         .end(done);
-    })
-
-
+    });
 });
+
+describe('POST /users', function () {
+    test('should create a user', () => {
+      let email = 'example@example.com';
+      let password = "123mnb!";
+
+      request(app)
+      .post('/users')
+      .send({email, password})
+      .expect(200)
+      .expect(res => {
+          expect(res.headers['x-auth']).toBeTruthy();
+          expect(res.body._id).toBeTruthy();
+          expect(res.body.email).toBe(email);
+      })
+      .end((err) => {
+          if(err) return done(err);
+          User.findOne({email}).then(user => {
+              expect(user).toBeTruthy();
+              expect(user.password).not.toBe(password);
+          });
+      });
+    });
+
+    test('should return validtation errors if request invalid', () => {
+      
+    });
+
+    test('should not create user if email in use', () => {
+      
+    })
+    
+    
+    
+})
