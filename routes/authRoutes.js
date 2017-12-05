@@ -69,4 +69,11 @@ module.exports = (app) => {
         let status = User.findByIdAndRemove(req.params.id).catch(e => res.status(400).send(e));
         res.send(status);
     });
+    app.delete('/api/users/me/token', authenticate, (req, res) => {
+        req.user.removeToken(req.token).then(() => {
+                res.status(200).send();
+            }, () => {
+                res.status(400).send();
+            });
+    });
 };

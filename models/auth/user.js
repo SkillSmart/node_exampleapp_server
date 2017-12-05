@@ -122,6 +122,14 @@ UserSchema.methods.generateAuthToken = async function () {
             return token;
         });
 };
+UserSchema.methods.removeToken = async function (token) {
+    let user = this;
+    return user.update({
+        $pull: {
+            tokens: {token}
+        }
+    })
+};
 
 // Add model methods
 UserSchema.statics.findByToken = async function (token) {
